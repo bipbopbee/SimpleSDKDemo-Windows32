@@ -1,0 +1,4 @@
+﻿  SimplePublisherSDKWin32DemoDlg.cpp
+e:\simplesdkdemo\windows\推流\simplepublishersdkwin32demo\simplepublishersdkwin32demo\simplepublishersdkwin32demodlg.cpp(138): warning C4101: “isAudio”: 未引用的局部变量
+e:\simplesdkdemo\windows\推流\simplepublishersdkwin32demo\simplepublishersdkwin32demo\simplepublishersdkwin32demodlg.cpp(184): warning C4101: “isAudio”: 未引用的局部变量
+  SimplePublisherSDKWin32Demo.vcxproj -> E:\SimpleSDKDemo\Windows\推流\SimplePublisherSDKWin32Demo\Debug\SimplePublisherSDKWin32Demo.exe
