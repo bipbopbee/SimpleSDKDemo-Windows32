@@ -175,46 +175,57 @@ void CSimplePublisherSDKWin32DemoDlg::OnBnClickedButton1()
 void CSimplePublisherSDKWin32DemoDlg::OnBnClickedButton2()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	CString url;
-	CString rate;
-	CString framerate;
-	CString port;
-	CString streamname;
-	bool isH264;
-	bool isAudio;
+	static bool flag = true;
+	if (flag) {
+		CString url;
+		CString rate;
+		CString framerate;
+		CString port;
+		CString streamname;
+		bool isH264;
+		bool isAudio;
 
-	m_rtspUrl.GetWindowTextW(url);
-	m_rtspRate.GetWindowTextW(rate);
-	m_rtspFrameRate.GetWindowTextW(framerate);
-	m_rtspPort.GetWindowTextW(port);
-	m_rtspStream.GetWindowTextW(streamname);
-
-
-	int iLen = WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)streamname, -1, NULL, 0, NULL, NULL);
-
-	char* chRtn = new char[iLen*sizeof(char)];
-
-	WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)streamname, -1, chRtn, iLen, NULL, NULL);
-	
+		m_rtspUrl.GetWindowTextW(url);
+		m_rtspRate.GetWindowTextW(rate);
+		m_rtspFrameRate.GetWindowTextW(framerate);
+		m_rtspPort.GetWindowTextW(port);
+		m_rtspStream.GetWindowTextW(streamname);
 
 
-	m_publisher.setEncodeRate(_ttoi(rate));
-	m_publisher.setFrameRate(_ttoi(framerate));
-	//m_publisher.setRtspPort(_ttoi(port));
-	//m_publisher.setRtspStream(chRtn);
-	if (m_encodeType2.GetCurSel() == 1)
-		isH264 = false;
+		int iLen = WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)streamname, -1, NULL, 0, NULL, NULL);
+
+		char* chRtn = new char[iLen * sizeof(char)];
+
+		WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)streamname, -1, chRtn, iLen, NULL, NULL);
+
+
+
+		m_publisher.setEncodeRate(_ttoi(rate));
+		m_publisher.setFrameRate(_ttoi(framerate));
+		m_publisher.setRtspPort(_ttoi(port));
+		m_publisher.setRtspStream(chRtn);
+		if (m_encodeType2.GetCurSel() == 1)
+			isH264 = false;
+		else
+			isH264 = true;
+		if (isH264)
+			m_publisher.setEncodeType(0);
+		else
+			m_publisher.setEncodeType(1);
+
+		m_publisher.setPushType(0);//0，RTSP 1:RTMP
+		m_publisher.startPush();
+		char* tempurl = m_publisher.getUrl();
+		m_rtspUrl.SetWindowTextW(CString(tempurl));
+		GetDlgItem(IDC_BUTTON2)->SetWindowTextW(_T("停止"));
+	}
 	else
-		isH264 = true;
-	if (isH264)
-		m_publisher.setEncodeType(0);
-	else
-		m_publisher.setEncodeType(1);
-
-	m_publisher.setPushType(0);//0，RTSP 1:RTMP
-	m_publisher.startPush();
-	char* tempurl = m_publisher.getUrl();
-	m_rtspUrl.SetWindowTextW(CString(tempurl));
+	{
+		m_publisher.stopPush();
+		m_rtspUrl.SetWindowTextW(CString(""));
+		GetDlgItem(IDC_BUTTON2)->SetWindowTextW(_T("发布"));
+	}
+	flag = !flag;
 }
 
 
