@@ -94,15 +94,25 @@ HCURSOR CSimplePlayerSDKWin32DemoDlg::OnQueryDragIcon()
 void CSimplePlayerSDKWin32DemoDlg::OnBnClickedButton1()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	CString url;
-	m_url.GetWindowTextW(url);
-	int iLen = WideCharToMultiByte(CP_ACP, 0, url, -1, NULL, 0, NULL, NULL);
+	static bool flag = true;
+	if (flag) {
+		CString url;
+		m_url.GetWindowTextW(url);
+		int iLen = WideCharToMultiByte(CP_ACP, 0, url, -1, NULL, 0, NULL, NULL);
 
-	char* chRtn = new char[iLen*sizeof(char)];
+		char* chRtn = new char[iLen * sizeof(char)];
 
-	WideCharToMultiByte(CP_ACP, 0, url, -1, chRtn, iLen, NULL, NULL);
-	m_player.setPlayUrl(chRtn);
-	HWND   playWnd = ::GetDlgItem(GetSafeHwnd(), IDC_STATIC);
-	m_player.setPlayWnd(playWnd);
-	m_player.play();
+		WideCharToMultiByte(CP_ACP, 0, url, -1, chRtn, iLen, NULL, NULL);
+		m_player.setPlayUrl(chRtn);
+		HWND   playWnd = ::GetDlgItem(GetSafeHwnd(), IDC_STATIC);
+		m_player.setPlayWnd(playWnd);
+		m_player.play();
+		GetDlgItem(IDC_BUTTON1)->SetWindowTextW(_T("停止"));
+	}
+	else
+	{
+		m_player.stop();
+		GetDlgItem(IDC_BUTTON1)->SetWindowTextW(_T("播放"));
+	}
+	flag = !flag;
 }
