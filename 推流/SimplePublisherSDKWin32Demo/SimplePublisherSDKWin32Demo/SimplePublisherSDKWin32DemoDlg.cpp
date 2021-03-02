@@ -131,44 +131,55 @@ void CSimplePublisherSDKWin32DemoDlg::OnBnClickedCheck1()
 void CSimplePublisherSDKWin32DemoDlg::OnBnClickedButton1()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	CString url;
-	CString rate;
-	CString framerate;
-	bool isH264;
-	bool isAudio;
-	
-	m_rtmpUrl.GetWindowTextW(url);
-	m_rtmpRate.GetWindowTextW(rate);
-	m_rtmpFrameRate.GetWindowTextW(framerate);
-	
-	int iLen = WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)url, -1, NULL, 0, NULL, NULL);
+	static bool rtmpflag = true;
+	if (rtmpflag) {
+		CString url;
+		CString rate;
+		CString framerate;
+		bool isH264;
+		bool isAudio;
 
-	char* chRtn = new char[iLen*sizeof(char)];
+		m_rtmpUrl.GetWindowTextW(url);
+		m_rtmpRate.GetWindowTextW(rate);
+		m_rtmpFrameRate.GetWindowTextW(framerate);
 
-	WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)url, -1, chRtn, iLen, NULL, NULL);
-	m_publisher.setRtmpUrl(chRtn);
+		int iLen = WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)url, -1, NULL, 0, NULL, NULL);
+
+		char* chRtn = new char[iLen * sizeof(char)];
+
+		WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)url, -1, chRtn, iLen, NULL, NULL);
+		m_publisher.setRtmpUrl(chRtn);
 
 
-	//m_publisher.setEncodeRate(_ttoi(rate));
-	//m_publisher.setFrameRate(_ttoi(framerate));
-	if (m_encodeType.GetCurSel() == 1)
-		isH264 = false;
-	else
-		isH264 = true;
-	if (isH264)
-		m_publisher.setEncodeType(0);
-	else
-		m_publisher.setEncodeType(1);
-	if (m_audioCheck.GetCheck())
-	{
-		m_publisher.setEnableAudio(true);
-		m_publisher.selectAudioSource(0);//扬声器
-	}else
-	{
-		m_publisher.setEnableAudio(false);
+		//m_publisher.setEncodeRate(_ttoi(rate));
+		//m_publisher.setFrameRate(_ttoi(framerate));
+		if (m_encodeType.GetCurSel() == 1)
+			isH264 = false;
+		else
+			isH264 = true;
+		if (isH264)
+			m_publisher.setEncodeType(0);
+		else
+			m_publisher.setEncodeType(1);
+		if (m_audioCheck.GetCheck())
+		{
+			m_publisher.setEnableAudio(true);
+			m_publisher.selectAudioSource(0);//扬声器
+		}
+		else
+		{
+			m_publisher.setEnableAudio(false);
+		}
+		m_publisher.setPushType(1);//0，RTSP 1:RTMP
+		m_publisher.startPush();
+		GetDlgItem(IDC_BUTTON1)->SetWindowTextW(_T("停止"));
 	}
-	m_publisher.setPushType(1);//0，RTSP 1:RTMP
-	m_publisher.startPush();
+	else
+	{
+		m_publisher.stopPush();
+		GetDlgItem(IDC_BUTTON1)->SetWindowTextW(_T("发布"));
+	}
+	rtmpflag = !rtmpflag;
 }
 
 
