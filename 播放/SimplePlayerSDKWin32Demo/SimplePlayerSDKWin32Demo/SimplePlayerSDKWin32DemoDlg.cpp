@@ -26,12 +26,14 @@ void CSimplePlayerSDKWin32DemoDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_EDIT2, m_url);
+	DDX_Control(pDX, IDC_EDIT3, m_rotate);
 }
 
 BEGIN_MESSAGE_MAP(CSimplePlayerSDKWin32DemoDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CSimplePlayerSDKWin32DemoDlg::OnBnClickedButton1)
+	ON_EN_CHANGE(IDC_EDIT3, &CSimplePlayerSDKWin32DemoDlg::OnEnChangeEdit3)
 END_MESSAGE_MAP()
 
 
@@ -97,13 +99,19 @@ void CSimplePlayerSDKWin32DemoDlg::OnBnClickedButton1()
 	static bool flag = true;
 	if (flag) {
 		CString url;
+		CString degree;
 		m_url.GetWindowTextW(url);
 		int iLen = WideCharToMultiByte(CP_ACP, 0, url, -1, NULL, 0, NULL, NULL);
-
 		char* chRtn = new char[iLen * sizeof(char)];
 
 		WideCharToMultiByte(CP_ACP, 0, url, -1, chRtn, iLen, NULL, NULL);
 		m_player.setPlayUrl(chRtn);
+		m_rotate.GetWindowTextW(degree);
+		int i_degree = _ttoi(degree);
+		if (i_degree > 0)
+		{
+			m_player.setRotate(i_degree);
+		}
 		HWND   playWnd = ::GetDlgItem(GetSafeHwnd(), IDC_STATIC);
 		m_player.setPlayWnd(playWnd);
 		m_player.play();
@@ -115,4 +123,15 @@ void CSimplePlayerSDKWin32DemoDlg::OnBnClickedButton1()
 		GetDlgItem(IDC_BUTTON1)->SetWindowTextW(_T("播放"));
 	}
 	flag = !flag;
+}
+
+
+void CSimplePlayerSDKWin32DemoDlg::OnEnChangeEdit3()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
 }

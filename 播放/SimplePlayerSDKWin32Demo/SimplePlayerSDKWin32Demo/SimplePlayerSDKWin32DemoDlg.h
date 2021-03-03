@@ -33,4 +33,6 @@ public:
 	afx_msg void OnBnClickedButton1();
 	CEdit m_url;
 	SimplePlayerSDK m_player;
+	afx_msg void OnEnChangeEdit3();
+	CEdit m_rotate;
 };
