@@ -48,4 +48,10 @@ public:
 	CEdit m_rtspStream;
 	CEdit m_rtspUrl;
 	SimplePublisherSDK m_publisher;
+	int m_cameraid;
+	CComboBox m_capturesource;
+	CComboBox m_cameraList;
+	afx_msg void OnBnClickedButton3();
+	afx_msg void OnCbnSelchangeCombo3();
+	afx_msg void OnCbnSelchangeCombo4();
 };

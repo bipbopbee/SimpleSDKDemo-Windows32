@@ -36,6 +36,8 @@ void CSimplePublisherSDKWin32DemoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT6, m_rtspPort);
 	DDX_Control(pDX, IDC_EDIT7, m_rtspStream);
 	DDX_Control(pDX, IDC_EDIT8, m_rtspUrl);
+	DDX_Control(pDX, IDC_COMBO3, m_capturesource);
+	DDX_Control(pDX, IDC_COMBO4, m_cameraList);
 }
 
 BEGIN_MESSAGE_MAP(CSimplePublisherSDKWin32DemoDlg, CDialogEx)
@@ -47,6 +49,9 @@ BEGIN_MESSAGE_MAP(CSimplePublisherSDKWin32DemoDlg, CDialogEx)
 	ON_EN_CHANGE(IDC_EDIT2, &CSimplePublisherSDKWin32DemoDlg::OnEnChangeEdit2)
 	ON_EN_CHANGE(IDC_EDIT3, &CSimplePublisherSDKWin32DemoDlg::OnEnChangeEdit3)
 	ON_EN_CHANGE(IDC_EDIT4, &CSimplePublisherSDKWin32DemoDlg::OnEnChangeEdit4)
+	ON_BN_CLICKED(IDC_BUTTON3, &CSimplePublisherSDKWin32DemoDlg::OnBnClickedButton3)
+	ON_CBN_SELCHANGE(IDC_COMBO3, &CSimplePublisherSDKWin32DemoDlg::OnCbnSelchangeCombo3)
+	ON_CBN_SELCHANGE(IDC_COMBO4, &CSimplePublisherSDKWin32DemoDlg::OnCbnSelchangeCombo4)
 END_MESSAGE_MAP()
 
 
@@ -64,11 +69,17 @@ BOOL CSimplePublisherSDKWin32DemoDlg::OnInitDialog()
 	ShowWindow(SW_MINIMIZE);
 
 	// TODO:  在此添加额外的初始化代码
+
+	m_capturesource.AddString(_T("桌面"));
+	m_capturesource.AddString(_T("摄像头"));
+	
+
 	m_encodeType.AddString(_T("H264"));
 	m_encodeType.AddString(_T("H265"));
 	m_encodeType2.AddString(_T("H264"));
 	m_encodeType2.AddString(_T("H265"));
 
+	m_capturesource.SetCurSel(0);
 	m_encodeType.SetCurSel(0);
 	m_encodeType2.SetCurSel(0);
 
@@ -270,4 +281,42 @@ void CSimplePublisherSDKWin32DemoDlg::OnEnChangeEdit4()
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
 	// TODO:  在此添加控件通知处理程序代码
+}
+
+void CSimplePublisherSDKWin32DemoDlg::OnBnClickedButton3()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_publisher.setCameraIndex(m_cameraid);
+	
+	m_publisher.setPreviewWindow(GetDlgItem(IDC_PREVIEW)->GetSafeHwnd());
+	//m_publisher.setPreviewWindow(m_hWnd);
+	m_publisher.startPreview();
+}
+
+
+void CSimplePublisherSDKWin32DemoDlg::OnCbnSelchangeCombo3()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (m_capturesource.GetCurSel() == 1)
+	{
+		std::map<int, std::string> camralist = m_publisher.getCameraList();
+		std::map<int, std::string>::iterator ite;
+		for (ite = camralist.begin(); ite != camralist.end(); ite++)
+		{
+			std::string name = ite->second;
+			m_cameraList.AddString((LPCTSTR)name.c_str());
+		}
+	}
+	else 
+	{
+		m_publisher.setCaptureType(0);
+	}
+}
+
+
+void CSimplePublisherSDKWin32DemoDlg::OnCbnSelchangeCombo4()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_cameraid = m_cameraList.GetCurSel();
+	m_publisher.setCaptureType(1);//0:桌面 1：摄像头
 }

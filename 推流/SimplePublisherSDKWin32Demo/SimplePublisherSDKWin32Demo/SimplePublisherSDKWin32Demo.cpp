@@ -15,6 +15,7 @@
 
 BEGIN_MESSAGE_MAP(CSimplePublisherSDKWin32DemoApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
+	ON_CBN_SELCHANGE(IDC_COMBO3, &CSimplePublisherSDKWin32DemoApp::OnCbnSelchangeCombo3)
 END_MESSAGE_MAP()
 
 
@@ -100,3 +101,10 @@ BOOL CSimplePublisherSDKWin32DemoApp::InitInstance()
 	return FALSE;
 }
 
+
+
+void CSimplePublisherSDKWin32DemoApp::OnCbnSelchangeCombo3()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	
+}
