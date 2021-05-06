@@ -54,4 +54,6 @@ public:
 	afx_msg void OnBnClickedButton3();
 	afx_msg void OnCbnSelchangeCombo3();
 	afx_msg void OnCbnSelchangeCombo4();
+	afx_msg void OnBnClickedButton4();
+	CEdit m_recordpath;
 };

@@ -8,34 +8,40 @@ class __declspec(dllexport) SimplePublisherSDK
 public:
 	SimplePublisherSDK();
 	~SimplePublisherSDK();
-	void setFrameRate(int rate);
+	void setFrameRate( int rate);
 
-	void setResolvtion(int width, int height);
+	void setResolvtion( int width, int height);
 
-	void setEncodeRate(int rate);
+	void setEncodeRate( int rate);
 
 	//0£∫X264, 1:X265
-	void setEncodeType(int type);
+	void setEncodeType( int type);
 
-	void setHardwareEncode(bool flag);
+	void setHardwareEncode( bool flag);
 
-	void setRtmpUrl(char* url);
+	void setRtmpUrl( char* url);
+
+	//¬º÷∆MP4
+	void setRecordPath(char* path);
+	void setEnableRecord(bool enableRecord);
+	void startRecord();
+	void stopRecord();
 
 	void startPush();
 
 	void stopPush();
 
-	void setIsPushing(bool isPushing);
+	void setIsPushing( bool isPushing);
 
 	bool getIsPushing();
 
 	char* getUrl();
 
 	//0:RTSP, 1:RTMP
-	void setPushType(int type);
+	void setPushType( int type);
 
-	void setRtspPort(int port);
-	void setRtspStream(char* stream);
+	void setRtspPort( int port);
+	void setRtspStream( char* stream);
 	int getPushType();
 
 	//“Ù∆µø™∆Ù…Ë÷√

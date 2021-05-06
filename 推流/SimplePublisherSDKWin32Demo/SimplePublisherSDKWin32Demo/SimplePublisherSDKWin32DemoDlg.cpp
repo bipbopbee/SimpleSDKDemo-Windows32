@@ -38,6 +38,7 @@ void CSimplePublisherSDKWin32DemoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT8, m_rtspUrl);
 	DDX_Control(pDX, IDC_COMBO3, m_capturesource);
 	DDX_Control(pDX, IDC_COMBO4, m_cameraList);
+	DDX_Control(pDX, IDC_EDIT9, m_recordpath);
 }
 
 BEGIN_MESSAGE_MAP(CSimplePublisherSDKWin32DemoDlg, CDialogEx)
@@ -52,6 +53,7 @@ BEGIN_MESSAGE_MAP(CSimplePublisherSDKWin32DemoDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CSimplePublisherSDKWin32DemoDlg::OnBnClickedButton3)
 	ON_CBN_SELCHANGE(IDC_COMBO3, &CSimplePublisherSDKWin32DemoDlg::OnCbnSelchangeCombo3)
 	ON_CBN_SELCHANGE(IDC_COMBO4, &CSimplePublisherSDKWin32DemoDlg::OnCbnSelchangeCombo4)
+	ON_BN_CLICKED(IDC_BUTTON4, &CSimplePublisherSDKWin32DemoDlg::OnBnClickedButton4)
 END_MESSAGE_MAP()
 
 
@@ -92,6 +94,7 @@ BOOL CSimplePublisherSDKWin32DemoDlg::OnInitDialog()
 	m_rtspPort.SetWindowTextW(_T("8554"));
 	m_rtspStream.SetWindowTextW(_T("livestream"));
 
+	m_recordpath.SetWindowTextW(_T("D:\\record.mp4"));
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -319,4 +322,32 @@ void CSimplePublisherSDKWin32DemoDlg::OnCbnSelchangeCombo4()
 	// TODO: 在此添加控件通知处理程序代码
 	m_cameraid = m_cameraList.GetCurSel();
 	m_publisher.setCaptureType(1);//0:桌面 1：摄像头
+}
+
+
+void CSimplePublisherSDKWin32DemoDlg::OnBnClickedButton4()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	static bool recordflag = true;
+	if (recordflag)
+	{
+		CString recordpath;
+		m_recordpath.GetWindowTextW(recordpath);
+
+		int iLen = WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)recordpath, -1, NULL, 0, NULL, NULL);
+
+		char* chRtn = new char[iLen * sizeof(char)];
+
+		WideCharToMultiByte(CP_ACP, 0, (LPCTSTR)recordpath, -1, chRtn, iLen, NULL, NULL);
+		m_publisher.setRecordPath(chRtn);
+		m_publisher.setEnableRecord(true);
+		m_publisher.startRecord();
+		GetDlgItem(IDC_BUTTON4)->SetWindowTextW(_T("停止录制"));
+	}
+	else
+	{
+		m_publisher.stopRecord();
+		GetDlgItem(IDC_BUTTON4)->SetWindowTextW(_T("开始录制"));
+	}
+	recordflag = !recordflag;
 }
