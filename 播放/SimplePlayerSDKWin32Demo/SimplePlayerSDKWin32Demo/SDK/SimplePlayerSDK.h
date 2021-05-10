@@ -14,6 +14,11 @@ public:
 	bool getIsPlaying();
 	void play();
 	void stop();
+	//Â¼ÖÆMP4
+	void setRecordPath(char* path);
+	void setEnableRecord(bool enableRecord);
+	void startRecord();
+	void stopRecord();
 	SimplePlayerSDK();
 	~SimplePlayerSDK();
 private:
