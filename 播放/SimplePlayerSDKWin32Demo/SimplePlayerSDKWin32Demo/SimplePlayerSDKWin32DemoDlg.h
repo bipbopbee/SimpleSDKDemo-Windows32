@@ -35,4 +35,6 @@ public:
 	SimplePlayerSDK m_player;
 	afx_msg void OnEnChangeEdit3();
 	CEdit m_rotate;
+	CEdit m_recordPath;
+	afx_msg void OnBnClickedButton2();
 };

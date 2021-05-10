@@ -27,6 +27,7 @@ void CSimplePlayerSDKWin32DemoDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_EDIT2, m_url);
 	DDX_Control(pDX, IDC_EDIT3, m_rotate);
+	DDX_Control(pDX, IDC_EDIT4, m_recordPath);
 }
 
 BEGIN_MESSAGE_MAP(CSimplePlayerSDKWin32DemoDlg, CDialogEx)
@@ -34,6 +35,7 @@ BEGIN_MESSAGE_MAP(CSimplePlayerSDKWin32DemoDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CSimplePlayerSDKWin32DemoDlg::OnBnClickedButton1)
 	ON_EN_CHANGE(IDC_EDIT3, &CSimplePlayerSDKWin32DemoDlg::OnEnChangeEdit3)
+	ON_BN_CLICKED(IDC_BUTTON2, &CSimplePlayerSDKWin32DemoDlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -52,6 +54,7 @@ BOOL CSimplePlayerSDKWin32DemoDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化代码
 	m_url.SetWindowTextW(_T("rtmp://58.200.131.2:1935/livetv/cctv1"));
+	m_recordPath.SetWindowTextW(_T("D:\\record.mp4"));
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -134,4 +137,31 @@ void CSimplePlayerSDKWin32DemoDlg::OnEnChangeEdit3()
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
 	// TODO:  在此添加控件通知处理程序代码
+}
+
+
+void CSimplePlayerSDKWin32DemoDlg::OnBnClickedButton2()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	static bool recordflag = true;
+	if (recordflag)
+	{
+		CString recordpath;
+		CString degree;
+		m_recordPath.GetWindowTextW(recordpath);
+		int iLen = WideCharToMultiByte(CP_ACP, 0, recordpath, -1, NULL, 0, NULL, NULL);
+		char* chRtn = new char[iLen * sizeof(char)];
+
+		WideCharToMultiByte(CP_ACP, 0, recordpath, -1, chRtn, iLen, NULL, NULL);
+		m_player.setRecordPath(chRtn);
+		m_player.setEnableRecord(true);
+		m_player.startRecord();
+		GetDlgItem(IDC_BUTTON2)->SetWindowTextW(_T("停止录制"));
+	}
+	else
+	{
+		m_player.stopRecord();
+		GetDlgItem(IDC_BUTTON2)->SetWindowTextW(_T("开始录制"));
+	}
+	recordflag = !recordflag;
 }
