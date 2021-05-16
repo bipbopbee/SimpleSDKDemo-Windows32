@@ -37,4 +37,6 @@ public:
 	CEdit m_rotate;
 	CEdit m_recordPath;
 	afx_msg void OnBnClickedButton2();
+	CEdit m_picturepath;
+	afx_msg void OnBnClickedButton3();
 };

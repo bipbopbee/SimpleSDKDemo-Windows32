@@ -14,6 +14,9 @@ public:
 	bool getIsPlaying();
 	void play();
 	void stop();
+	//½ØÍ¼
+	void setBitmapPath(char* path);
+	void captureBitmap();
 	//Â¼ÖÆMP4
 	void setRecordPath(char* path);
 	void setEnableRecord(bool enableRecord);
